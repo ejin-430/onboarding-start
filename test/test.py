@@ -83,6 +83,25 @@ async def send_spi_transaction(dut, r_w, address, data):
     await ClockCycles(dut.clk, 600)
     return ui_in_logicarray(ncs, bit, sclk)
 
+# Helpers 
+async def wait_rise_lsb(dut):
+    prev = int(dut.uo_out.value) & 1
+    while True:
+        await RisingEdge(dut.clk)
+        cur = int(dut.uo_out.value) & 1
+        if prev == 0 and cur == 1:
+            return
+        prev = cur
+
+async def wait_fall_lsb(dut):
+    prev = int(dut.uo_out.value) & 1
+    while True:
+        await RisingEdge(dut.clk)
+        cur = int(dut.uo_out.value) & 1
+        if prev == 1 and cur == 0:
+            return
+        prev = cur
+
 @cocotb.test(skip=True)
 async def test_spi(dut):
     dut._log.info("Start SPI test")
@@ -173,7 +192,7 @@ async def test_pwm_freq(dut):
     await ClockCycles(dut.clk, 1000)
 
     # Measure frequency: time between two rising edges
-    sig = dut.uo_out[0]
+    sig = dut.pwm_out
     await RisingEdge(sig)
     time1 = cocotb.utils.get_sim_time(units='us')
     await RisingEdge(sig)
@@ -223,7 +242,7 @@ async def test_pwm_duty(dut):
     await send_spi_transaction(dut, 1, 0x04, 128)
     await ClockCycles(dut.clk, 1000)
     # Measure duty cycle
-    sig = dut.uo_out[0]
+    sig = dut.pwm_out
     await RisingEdge(sig)
     time_rise = cocotb.utils.get_sim_time(units='us')
     await FallingEdge(sig)
