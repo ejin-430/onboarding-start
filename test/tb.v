@@ -24,6 +24,19 @@ module tb ();
   assign pwm_out = uo_out[0];
   wire [7:0] uio_out;
   wire [7:0] uio_oe;
+  
+  // Give reg inputs a known value at time 0 (avoids Xs in gate-level sim)
+  initial begin
+    clk    = 1'b0;
+    rst_n  = 1'b1;
+    ena    = 1'b0;
+    uio_in = 8'h00;
+
+    // SPI idle (Mode 0): nCS=1, COPI=0, SCLK=0
+    // ui_in[2]=nCS, ui_in[1]=COPI, ui_in[0]=SCLK  => 0b00000100
+    ui_in  = 8'h04;
+  end
+
 `ifdef GL_TEST
   wire VPWR = 1'b1;
   wire VGND = 1'b0;

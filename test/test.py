@@ -175,6 +175,8 @@ async def test_pwm_freq(dut):
 
     # Reset
     dut.ena.value = 1
+    dut.ui_in.value = ui_in_logicarray(1, 0, 0)  # nCS=1, COPI=0, SCLK=0
+    dut.uio_in.value = 0
     dut.rst_n.value = 0
     await ClockCycles(dut.clk, 5)
     dut.rst_n.value = 1
@@ -212,6 +214,8 @@ async def test_pwm_duty(dut):
 
     # Reset
     dut.ena.value = 1
+    dut.ui_in.value = ui_in_logicarray(1, 0, 0)  # nCS=1, COPI=0, SCLK=0
+    dut.uio_in.value = 0
     dut.rst_n.value = 0
     await ClockCycles(dut.clk, 5)
     dut.rst_n.value = 1
