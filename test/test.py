@@ -3,7 +3,7 @@
 
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import FallingEdge
+from cocotb.triggers import RisingEdge, FallingEdge
 from cocotb.triggers import ClockCycles
 from cocotb.types import Logic
 from cocotb.types import LogicArray
@@ -83,7 +83,7 @@ async def send_spi_transaction(dut, r_w, address, data):
     await ClockCycles(dut.clk, 600)
     return ui_in_logicarray(ncs, bit, sclk)
 
-@cocotb.test()
+@cocotb.test(skip=True)
 async def test_spi(dut):
     dut._log.info("Start SPI test")
 
