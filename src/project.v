@@ -26,11 +26,30 @@ module tt_um_uwasic_onboarding_eva_jin (
   wire [7:0] en_reg_pwm_15_8;
   wire [7:0] pwm_duty_cycle;
 
-  assign en_reg_out_7_0  = 8'h00;
-  assign en_reg_out_15_8 = 8'h00;
-  assign en_reg_pwm_7_0  = 8'h00;
-  assign en_reg_pwm_15_8 = 8'h00;
-  assign pwm_duty_cycle  = 8'h00;
+  // assign en_reg_out_7_0  = 8'h00;
+  // assign en_reg_out_15_8 = 8'h00;
+  // assign en_reg_pwm_7_0  = 8'h00;
+  // assign en_reg_pwm_15_8 = 8'h00;
+  // assign pwm_duty_cycle  = 8'h00;
+
+    // SPI inputs from ui_in
+  wire spi_sclk = ui_in[0];
+  wire spi_copi = ui_in[1];
+  wire spi_ncs  = ui_in[2];
+
+  // Instantiate the SPI peripheral (drives the registers)
+  spi_peripheral spi_inst (
+    .clk(clk),
+    .rst_n(rst_n),
+    .spi_sclk(spi_sclk),
+    .spi_copi(spi_copi),
+    .spi_ncs(spi_ncs),
+    .en_reg_out_7_0(en_reg_out_7_0),
+    .en_reg_out_15_8(en_reg_out_15_8),
+    .en_reg_pwm_7_0(en_reg_pwm_7_0),
+    .en_reg_pwm_15_8(en_reg_pwm_15_8),
+    .pwm_duty_cycle(pwm_duty_cycle)
+  );
 
   // Instantiate the PWM module
   pwm_peripheral pwm_peripheral_inst (
