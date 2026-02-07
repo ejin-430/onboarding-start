@@ -99,7 +99,7 @@ async def wait_fall_lsb(dut):
             return
         prev = cur
 
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_spi(dut):
     dut._log.info("Start SPI test")
 
